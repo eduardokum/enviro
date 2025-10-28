@@ -2,8 +2,34 @@ from enviro.constants import *
 import machine, math, os, time, utime
 from phew import logging
 
-ADC_VOLT_CONVERSATION = 3.3 / 65535
-VOLTAGE_SAMPLES = 10 
+ADC_VOLT_CONVERSION = 3.3 / 65535   # fator de conversão ADC → volts
+ADC_CHANNEL = 3                     # canal 3 = VSYS/3
+VOLTAGE_SAMPLES = 10                # quantidade de amostras para média
+BATTERY_CURVE = [
+    (4.20, 100),
+    (4.15, 95),
+    (4.10, 90),
+    (4.05, 85),
+    (4.00, 80),
+    (3.95, 75),
+    (3.90, 70),
+    (3.85, 65),
+    (3.80, 60),
+    (3.75, 55),
+    (3.70, 50),
+    (3.65, 40),
+    (3.60, 30),
+    (3.55, 20),
+    (3.45, 10),
+    (3.30, 5),
+    (3.00, 0),
+]
+
+try:
+  import config # fails to import (missing/corrupt) go into provisioning
+  VOLTAGE_CALIBRATION_FACTOR = config.voltage_calibration_factor
+except Exception as e:
+  VOLTAGE_CALIBRATION_FACTOR = 1.000
 
 # miscellany
 # ===========================================================================
@@ -183,13 +209,22 @@ def get_battery_voltage():
 
 
 def _read_vsys_voltage():
-  adc_Vsys = machine.ADC(3)
-  return adc_Vsys.read_u16() * 3.0 * ADC_VOLT_CONVERSATION
+  adc_Vsys = machine.ADC(ADC_CHANNEL)
+  return adc_Vsys.read_u16() * 3.0 * ADC_VOLT_CONVERSATION * VOLTAGE_CALIBRATION_FACTOR
 
-def get_battery_percent(v):
-    if v >= 4.2:
+def get_battery_percent(volts):
+    """Interpolação da porcentagem com base na curva real."""
+    if volts >= BATTERY_CURVE[0][0]:
         return 100
-    elif v <= 3.0:
+    if volts <= BATTERY_CURVE[-1][0]:
         return 0
-    else:
-        return int((v - 3.0) / (4.2 - 3.0) * 100)
+
+    # Busca dois pontos da curva entre os quais está a tensão
+    for i in range(len(BATTERY_CURVE) - 1):
+        v_high, p_high = BATTERY_CURVE[i]
+        v_low, p_low = BATTERY_CURVE[i + 1]
+        if v_low <= volts <= v_high:
+            # Interpolação linear entre os dois pontos
+            ratio = (volts - v_low) / (v_high - v_low)
+            return int(p_low + ratio * (p_high - p_low))
+    return 0  # fallback (não deve ocorrer)

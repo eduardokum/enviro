@@ -82,5 +82,11 @@ def add_missing_config_settings():
     warn_missing_config_setting("secondary_destination")
     config.secondary_destination = DEFAULT_SECONDARY_DESTINATION
 
+  try:
+    config.voltage_calibration_factor
+  except AttributeError:
+    warn_missing_config_setting("voltage_calibration_factor")
+    config.voltage_calibration_factor = 1.000
+
 def warn_missing_config_setting(setting):
     logging.warn(f"> config setting '{setting}' missing, please add it to config.py")

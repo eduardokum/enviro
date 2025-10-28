@@ -87,3 +87,6 @@ height_above_sea_level = 0
 
 # Feature toggles
 enable_battery_voltage = False
+
+# voltage calibration
+voltage_calibration_factor = 1.000
