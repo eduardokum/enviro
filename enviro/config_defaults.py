@@ -71,6 +71,12 @@ def add_missing_config_settings():
     config.utc_offset = DEFAULT_UTC_OFFSET
 
   try:
+    config.enable_battery_voltage
+  except AttributeError:
+    warn_missing_config_setting("enable_battery_voltage")
+    config.enable_battery_voltage = False
+
+  try:
     config.secondary_destination
   except AttributeError:
     warn_missing_config_setting("secondary_destination")

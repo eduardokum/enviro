@@ -74,6 +74,9 @@ try:
   # take a reading from the onboard sensors
   enviro.logging.debug(f"> taking new reading")
   reading = enviro.get_sensor_readings()
+  if enviro.config.enable_battery_voltage:
+    enviro.logging.debug(f"> geting battery voltage")
+    reading["voltage"] = enviro.helpers.get_battery_voltage()
 
   # here you can customise the sensor readings by adding extra information
   # or removing readings that you don't want, for example:

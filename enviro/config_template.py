@@ -85,3 +85,5 @@ sea_level_pressure = False
 # height in metres
 height_above_sea_level = 0
 
+# Feature toggles
+enable_battery_voltage = False

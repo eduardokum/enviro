@@ -2,6 +2,8 @@ from enviro.constants import *
 import machine, math, os, time, utime
 from phew import logging
 
+ADC_VOLT_CONVERSATION = 3.3 / 65535
+
 # miscellany
 # ===========================================================================
 def datetime_string():
@@ -159,3 +161,21 @@ def get_sea_level_pressure(observed_pressure, temperature_in_c, altitude_in_m):
 # def sea(pressure, temperature, height):
 	qnh = observed_pressure * ((1 - ((0.0065 * altitude_in_m) / (temperature_in_c + (0.0065 * altitude_in_m) + 273.15)))** -5.257)
 	return qnh
+
+def get_battery_voltage():
+  old_pad = machine.mem32[0x4001c000 | (4 + (4 * 29))]
+  machine.mem32[0x4001c000 | (4 + (4 * 29))] = 128
+
+  sample_count = 10
+  battery_voltage = 0
+  for i in range(0, sample_count):
+    battery_voltage += _read_vsys_voltage()
+  battery_voltage /= sample_count
+  battery_voltage = round(battery_voltage, 3)
+  machine.mem32[0x4001c000 | (4 + (4 * 29))] = old_pad
+  return battery_voltage
+
+
+def _read_vsys_voltage():
+  adc_Vsys = machine.ADC(3)
+  return adc_Vsys.read_u16() * 3.0 * ADC_VOLT_CONVERSATION

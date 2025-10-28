@@ -36,6 +36,7 @@
     </section>
 
     <input type="hidden" id="destination" name="destination" value="{{config.destination}}" />
+    <input type="hidden" id="secondary_destination" name="secondary_destination" value="{{config.secondary_destination}}" />
 
     <div id="destination_settings">
       <div id="destination_mqtt">
@@ -136,7 +137,33 @@
         }
       })
 
-      document.getElementById("destination").value = destination
+      oldDestination = document.getElementById("destination").value;
+      if (['http', 'influxdb', 'mqtt', 'adafruit_io', 'wunderground'].indexOf(oldDestination) !== -1) {
+        'ja tinha entrado em outro antes'
+        const fields = document.getElementById("destination_" + oldDestination).querySelectorAll("input, select, textarea");
+        const hasFilledField = Array.from(fields).some((field) => {
+          // Para input e textarea, verifica se o valor não está vazio
+          if (field.tagName === "INPUT" || field.tagName === "TEXTAREA") {
+            return field.value.trim() !== "";
+          }
+          // Para select, verifica se há uma opção selecionada diferente de vazia
+          if (field.tagName === "SELECT") {
+            return field.value && field.value.trim() !== "";
+          }
+          return false;
+        });
+
+         if (hasFilledField) {
+            document.querySelector('[data-destination="'+oldDestination+'"]').classList.add("configured")
+            document.getElementById("secondary_destination").value = destination
+          } else {
+            document.querySelector('[data-destination="'+oldDestination+'"]').classList.remove("configured")
+            document.getElementById("destination").value = destination
+          }
+      } else {
+        document.getElementById("destination").value = destination
+      }
+      
 
       document.querySelectorAll("#destination_settings >div").forEach((destinationItem) => {
         if(destinationItem.id == "destination_" + destination) {

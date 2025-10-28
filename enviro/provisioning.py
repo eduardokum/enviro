@@ -103,6 +103,7 @@ def provision_step_3_logging(request):
 def provision_step_4_destination(request):
   if request.method == "POST":
     config.destination = request.form["destination"]
+    config.secondary_destination = request.form["secondary_destination"]
 
     # custom http endpoint
     config.custom_http_url = request.form["custom_http_url"]
