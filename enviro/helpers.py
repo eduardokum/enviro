@@ -3,6 +3,7 @@ import machine, math, os, time, utime
 from phew import logging
 
 ADC_VOLT_CONVERSATION = 3.3 / 65535
+VOLTAGE_SAMPLES = 10 
 
 # miscellany
 # ===========================================================================
@@ -163,19 +164,32 @@ def get_sea_level_pressure(observed_pressure, temperature_in_c, altitude_in_m):
 	return qnh
 
 def get_battery_voltage():
+  # Salva configuração do pino 29
   old_pad = machine.mem32[0x4001c000 | (4 + (4 * 29))]
+  
   machine.mem32[0x4001c000 | (4 + (4 * 29))] = 128
 
-  sample_count = 10
   battery_voltage = 0
-  for i in range(0, sample_count):
+  for _ in range(VOLTAGE_SAMPLES):
     battery_voltage += _read_vsys_voltage()
-  battery_voltage /= sample_count
-  battery_voltage = round(battery_voltage, 3)
+    time.sleep_ms(20)
+
+  battery_voltage = round(battery_voltage / VOLTAGE_SAMPLES, 3)
+
+  # Restaura configuração do pino
   machine.mem32[0x4001c000 | (4 + (4 * 29))] = old_pad
+
   return battery_voltage
 
 
 def _read_vsys_voltage():
   adc_Vsys = machine.ADC(3)
   return adc_Vsys.read_u16() * 3.0 * ADC_VOLT_CONVERSATION
+
+def get_battery_percent(v):
+    if v >= 4.2:
+        return 100
+    elif v <= 3.0:
+        return 0
+    else:
+        return int((v - 3.0) / (4.2 - 3.0) * 100)
