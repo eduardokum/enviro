@@ -34,7 +34,7 @@ def add_missing_config_settings():
     warn_missing_config_setting("wifi_country")
     config.wifi_country = "GB"
   
-   try:
+  try:
     config.wunderground_id
   except AttributeError:
     warn_missing_config_setting("wunderground_id")

@@ -69,6 +69,9 @@ try:
   if enviro.config.destination == "mqtt":
       if enviro.config.hass_discovery:
         enviro.hass_discovery()
+        enviro.logging.debug(f"> hass dicovery package sent")
+      else:
+        enviro.logging.debug(f"> hass dicovery disabled")
 
   # TODO should the board auto take a reading when the timer has been set, or wait for the time?
   # take a reading from the onboard sensors

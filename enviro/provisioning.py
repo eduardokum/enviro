@@ -114,7 +114,8 @@ def provision_step_4_destination(request):
     config.mqtt_broker_address = request.form["mqtt_broker_address"]
     config.mqtt_broker_username = request.form["mqtt_broker_username"]
     config.mqtt_broker_password = request.form["mqtt_broker_password"]
-    config.hass_discovery = request.form["hass_discovery"]
+    hass_discovery_value = request.form.get('hass_discovery', '')
+    config.hass_discovery = hass_discovery_value.lower() in ("1", "true", "on", "yes")
 
     # adafruit io
     config.adafruit_io_username = request.form["adafruit_io_username"]

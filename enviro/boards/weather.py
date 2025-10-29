@@ -187,8 +187,9 @@ def rainfall(seconds_since_last):
           # the error will be minimised with frequent readings
           # TODO sum yesterday rain and generate a rain_today reading with
           # 23:59:59 timestamp of yesterday
-          if tsday != now_day:
-            today += RAIN_MM_PER_TICK
+          
+        if tsday != now_day:
+          today += RAIN_MM_PER_TICK
         # count how many rain ticks in the last hour
         if now - ts < 3600:
           per_hour += RAIN_MM_PER_TICK

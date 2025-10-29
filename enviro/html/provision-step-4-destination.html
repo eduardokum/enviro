@@ -53,6 +53,21 @@
           <input type="text" name="mqtt_broker_username" value="{{config.mqtt_broker_username}}" placeholder="Username (e.g. data_junkie)" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false" />
           <input type="text" name="mqtt_broker_password" value="{{config.mqtt_broker_password}}" placeholder="Password (e.g. ih3artd4ta)" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false" />
         </fieldset>
+
+        <h2>Discovery by homeassistant</h2>
+        <fieldset>
+          <ul id="hass_discovering" class="picker">
+          <li data-hass-discovery="True"> 
+            Yes
+          </li>
+          <li data-hass-discovery="False" > 
+            No
+          </li>
+        </ul>        
+        <input type="hidden" id="hass_discovery" name="hass_discovery" value="{{config.hass_discovery}}" />
+      </fieldset>
+
+        
       </div>
 
       <div id="destination_influxdb">
@@ -142,6 +157,8 @@
         'ja tinha entrado em outro antes'
         const fields = document.getElementById("destination_" + oldDestination).querySelectorAll("input, select, textarea");
         const hasFilledField = Array.from(fields).some((field) => {
+          if (field.type === "hidden") return false;
+
           // Para input e textarea, verifica se o valor não está vazio
           if (field.tagName === "INPUT" || field.tagName === "TEXTAREA") {
             return field.value.trim() !== "";
@@ -180,6 +197,24 @@
       })
     })
 
+    function selectHassDiscovery(hass_discovery) {
+        document.querySelectorAll("#hass_discovering >li").forEach((listItem) => {          
+          if(listItem.dataset.hassDiscovery == hass_discovery) {
+            listItem.classList.add("active")
+          }else{
+            listItem.classList.remove("active")
+          }
+        })
+        document.getElementById("hass_discovery").value = hass_discovery
+      }
+
+      document.querySelectorAll("#hass_discovery >li").forEach((listItem) => {
+        listItem.addEventListener("click", function(e) {
+          selectAutoWater(listItem.dataset.hassDiscovery)
+        })
+      })
+
+    selectHassDiscovery("{{config.hass_discovery}}")
     selectDestination("{{config.destination}}")
   </script>
 

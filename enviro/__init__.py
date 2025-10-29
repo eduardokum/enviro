@@ -553,6 +553,10 @@ def upload_readings():
 
 # HASS Discovery
 def hass_discovery():
+  if not connect_to_wifi():
+    logging.error(f"  - cannot upload readings, wifi connection failed")
+    return False
+
   destination = config.destination
   try:
     exec(f"import enviro.destinations.{destination}")
