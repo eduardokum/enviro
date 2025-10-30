@@ -29,8 +29,9 @@ sleep(0.5)
 
 # import enviro firmware, this will trigger provisioning if needed
 import enviro
+from lib import ota_light
+from enviro.version import __version__
 import os
-
 
 try:
   # initialise enviro
@@ -65,6 +66,15 @@ try:
   filesystem_stats = os.statvfs(".")
   enviro.logging.debug(f"> {filesystem_stats[3]} blocks free out of {filesystem_stats[2]}")
 
+  if ota_light.should_check_ota():
+    if enviro.connect_to_wifi():
+      try:
+        ota_light.check_and_update(current_version=__version__)
+      except Exception as e:
+        enviro.logging.error("Falha OTA:", e)
+  else:
+    enviro.logging.error("OTA ignorado — última verificação recente.")
+    
   # Add HASS Discovery command before taking new readings
   if enviro.config.destination == "mqtt":
       if enviro.config.hass_discovery:
