@@ -2,7 +2,7 @@ from enviro import logging
 from enviro.constants import UPLOAD_SUCCESS, UPLOAD_FAILED
 import urequests
 import config
-from enviro.helpers import celcius_to_fahrenheit, hpa_to_inches, metres_per_second_to_miles_per_hour, mm_to_inches
+from enviro.helpers import celcius_to_fahrenheit, hpa_to_inches, metres_per_second_to_miles_per_hour, mm_to_inches, hpa_to_inches
 
 def log_destination():
   logging.info(f"> uploading cached readings to Weather Underground device: {config.wunderground_id}")
@@ -51,6 +51,9 @@ def upload_reading(reading):
 
     if key == "dewpoint":
       url += "&dewptf=" + str(celcius_to_fahrenheit(value))
+
+    if key == "pressure":
+      url += "&baromin=" + str(hpa_to_inches(value))
 
   logging.info(f"> upload url: {url}")
 

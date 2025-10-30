@@ -210,7 +210,7 @@ def get_battery_voltage():
 
 def _read_vsys_voltage():
   adc_Vsys = machine.ADC(ADC_CHANNEL)
-  return adc_Vsys.read_u16() * 3.0 * ADC_VOLT_CONVERSATION * VOLTAGE_CALIBRATION_FACTOR
+  return adc_Vsys.read_u16() * 3.0 * ADC_VOLT_CONVERSION * VOLTAGE_CALIBRATION_FACTOR
 
 def get_battery_percent(volts):
     """Interpolação da porcentagem com base na curva real."""

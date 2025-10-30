@@ -56,11 +56,12 @@ def hass_discovery(board_type):
   mqtt_discovery("Enviro Temperature", "temperature", "°C", "temperature", board_type) # Temperature
   mqtt_discovery("Enviro Pressure", "pressure", "hPa", "pressure", board_type) # Pressure
   mqtt_discovery("Enviro Humidity", "humidity", "%", "humidity", board_type) # Humidity
-  mqtt_discovery("Enviro Voltage", "voltage", "V", "voltage", board_type) # Voltage
+  mqtt_discovery("Enviro Battery Voltage", "voltage", "V", "battery_voltage", board_type) # Voltage
+  mqtt_discovery("Enviro Battery Percent", "battery", "%", "battery_percent", board_type) # Percent
   if (board_type == "weather"):
     mqtt_discovery("Enviro Luminance", "illuminance", "lx", "luminance", board_type) # Luminance
     mqtt_discovery("Enviro Wind Speed", "wind_speed", "m/s", "wind_speed", board_type) # Wind Speed
-    mqtt_discovery("Enviro Wind Direction", "measurement", "°", "wind_direction", board_type) # Wind Speed
+    mqtt_discovery("Enviro Wind Direction", "none", "°", "wind_direction", board_type) # Wind Speed
     mqtt_discovery("Enviro Rain", "precipitation", "mm", "rain", board_type) # Rain
     mqtt_discovery("Dew point", "temperature", "°", "dewpoint", board_type) # Dew point
     mqtt_discovery("Enviro Rain Per Second", "precipitation", "mm/s", "rain_per_second", board_type) # Rain Per Second

@@ -81,6 +81,7 @@ try:
     enviro.logging.debug(f"> geting battery voltage")
     reading["battery_voltage"] = enviro.helpers.get_battery_voltage()
     reading["battery_percent"] = enviro.helpers.get_battery_percent(reading["battery_voltage"])
+    enviro.logging.debug(f"> battery voltage: {reading['battery_voltage']}, percent: {reading['battery_percent']}")
 
   # here you can customise the sensor readings by adding extra information
   # or removing readings that you don't want, for example:
