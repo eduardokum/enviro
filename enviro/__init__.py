@@ -607,8 +607,18 @@ def startup():
       logging.debug("  - wake reason: trigger")
       sleep()
 
-  # log the wake reason
-  logging.info("  - wake reason:", wake_reason_name(reason), "Time:", time.localtime())
+  # --- início da verificação de RTC / alarme ---
+  dt = rtc.datetime()
+  if dt[0] <= 2020:
+      logging.warning(" - RTC shows invalid datetime: %s", dt)
+      # podemos definir um fallback: sincronizar logo ou enviar alerta
+      # você pode configurar para forçar sync agora ou limitar o sono
+  if reason != WAKE_REASON_RTC_ALARM:
+      logging.warning(" - wake reason is not rtc_alarm: %s", wake_reason_name(reason))
+      # poderíamos considerar isso como alarme perdido ou reset externo
+      
+  # --- fim da verificação ---
+  logging.info(" - wake reason:", wake_reason_name(reason), "Time:", time.localtime())
 
   # also immediately turn on the LED to indicate that we're doing something
   logging.debug("  - turn on activity led")

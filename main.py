@@ -30,12 +30,16 @@ sleep(0.5)
 # import enviro firmware, this will trigger provisioning if needed
 import enviro
 from lib import ota_light
+from machine import WDT
 from enviro.version import __version__
 import os
+
+wdt = WDT(timeout=8000)
 
 try:
   # initialise enviro
   enviro.startup()
+  wdt.feed()
 
   # if the clock isn't set...
   if not enviro.is_clock_set():
@@ -93,6 +97,7 @@ try:
     reading["battery_percent"] = enviro.helpers.get_battery_percent(reading["battery_voltage"])
     enviro.logging.debug(f"> battery voltage: {reading['battery_voltage']}, percent: {reading['battery_percent']}")
 
+  wdt.feed()
   # here you can customise the sensor readings by adding extra information
   # or removing readings that you don't want, for example:
   # 
@@ -117,7 +122,8 @@ try:
     # otherwise save reading to local csv file (look in "/readings")
     enviro.logging.debug(f"> saving reading locally")
     enviro.save_reading(reading)
-
+    
+  wdt.feed()
   # go to sleep until our next scheduled reading
   enviro.sleep()
 
