@@ -1,5 +1,5 @@
 {
-  "version": "1.3.6",
+  "version": "1.3.7",
   "files": [
     {
       "path": "/main.py",
@@ -39,12 +39,12 @@
     {
       "path": "/enviro/version.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/version.py",
-      "sha256": "e596c042da1de506a54c8d42d8dd3b79d971a65cc6fd0d97bc6392c8ea24e2e0"
+      "sha256": "f6979a5ce6abdaa7b338f244286e9c0ff03469a5ebcdd54df21fafe9f0680449"
     },
     {
       "path": "/enviro/__init__.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/__init__.py",
-      "sha256": "df269f24cf2c1a24e0c81eed75b2bc6693da9e1463677798b613aa1699f2139e"
+      "sha256": "6fbaa1e723c4be7628ce2c49835409c086ac9dbf4badc902020929abbbfff6ab"
     },
     {
       "path": "/enviro/boards/grow.py",
@@ -154,12 +154,12 @@
     {
       "path": "/enviro/version.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/version.py",
-      "sha256": "e596c042da1de506a54c8d42d8dd3b79d971a65cc6fd0d97bc6392c8ea24e2e0"
+      "sha256": "f6979a5ce6abdaa7b338f244286e9c0ff03469a5ebcdd54df21fafe9f0680449"
     },
     {
       "path": "/enviro/__init__.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/__init__.py",
-      "sha256": "df269f24cf2c1a24e0c81eed75b2bc6693da9e1463677798b613aa1699f2139e"
+      "sha256": "6fbaa1e723c4be7628ce2c49835409c086ac9dbf4badc902020929abbbfff6ab"
     },
     {
       "path": "/enviro/boards/grow.py",
