@@ -1,8 +1,11 @@
 # keep the power rail alive by holding VSYS_EN high as early as possible
 # ===========================================================================
 from enviro.constants import *
-from machine import Pin
+from machine import Pin, WDT
 hold_vsys_en_pin = Pin(HOLD_VSYS_EN_PIN, Pin.OUT, value=True)
+
+# 🐶 Inicia o watchdog (reinicia se travar por mais de 2 minutos)
+wdt = WDT(timeout=120000)  # tempo em milissegundos = 2 minutos
 
 # detect board model based on devices on the i2c bus and pin state
 # ===========================================================================
@@ -589,6 +592,8 @@ def hass_discovery():
 def startup():
   import sys
 
+  wdt.feed()
+
   # write startup info into log file
   logging.info("> performing startup")
   logging.debug(f"  - running Enviro {ENVIRO_VERSION}, {sys.version.split('; ')[1]}")
@@ -673,12 +678,14 @@ def sleep(time_override=None):
   rtc.enable_alarm_interrupt(True)
 
   # disable the vsys hold, causing us to turn off
-  logging.info("  - shutting down")
+  logging.info("  - shutting down at " + str(time.localtime()))
   hold_vsys_en_pin.init(Pin.IN)
 
   # if we're still awake it means power is coming from the USB port in which
   # case we can't (and don't need to) sleep.
   stop_activity_led()
+
+  wdt.feed()
 
   # if running via mpremote/pyboard.py with a remote mount then we can't
   # reset the board so just exist
