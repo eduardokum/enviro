@@ -1,9 +1,5 @@
-import os
-import json
-import time
-import network
-import urequests
-import logging
+import os, ujson, usocket, ussl, uhashlib, machine, time
+from phew import logging
 
 OTA_CHECK_INTERVAL = 3600 * 6  # check every 6 hours
 OTA_INFO_FILE = "/data/ota_info.json"

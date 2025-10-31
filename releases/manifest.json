@@ -104,7 +104,7 @@
     {
       "path": "/lib/ota_light.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/lib/ota_light.py",
-      "sha256": "be009211ad4aeea63852b5879482783f54fe46d7448a346304ef8b991297d749"
+      "sha256": "3da01a604886bc4eaff6af3346630f509506fc72d9d4820a28fcc879cd5b1727"
     },
     {
       "path": "/lib/adafruit_bus_device/i2c_device.py",
@@ -219,7 +219,7 @@
     {
       "path": "/lib/ota_light.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/lib/ota_light.py",
-      "sha256": "be009211ad4aeea63852b5879482783f54fe46d7448a346304ef8b991297d749"
+      "sha256": "3da01a604886bc4eaff6af3346630f509506fc72d9d4820a28fcc879cd5b1727"
     },
     {
       "path": "/lib/adafruit_bus_device/i2c_device.py",
