@@ -1,10 +1,10 @@
 {
-  "version": "1.3.7",
+  "version": "1.3.8",
   "files": [
     {
       "path": "/main.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/main.py",
-      "sha256": "964a9ef28da7f0d2a3d1d5c98a7b162293d47b07d60363249180901578c8294a"
+      "sha256": "c0b4bbcf3b966058b502d859af7accb551a285f43772999b14770e704b28b443"
     },
     {
       "path": "/enviro/config_defaults.py",
@@ -39,12 +39,12 @@
     {
       "path": "/enviro/version.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/version.py",
-      "sha256": "f6979a5ce6abdaa7b338f244286e9c0ff03469a5ebcdd54df21fafe9f0680449"
+      "sha256": "e3bc4484e75547963cfa9647f1a54fe99d9486163c8c659343eac91ede5f21e5"
     },
     {
       "path": "/enviro/__init__.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/__init__.py",
-      "sha256": "6fbaa1e723c4be7628ce2c49835409c086ac9dbf4badc902020929abbbfff6ab"
+      "sha256": "66045f86a405eef0cf7c8ff9d3d5cdb1c4cd3ca2a99938ccd3dffcf50001ab9b"
     },
     {
       "path": "/enviro/boards/grow.py",
@@ -104,7 +104,7 @@
     {
       "path": "/lib/ota_light.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/lib/ota_light.py",
-      "sha256": "df90da91d15a7b81e102b71548fe103425e611ea3f0236e8716306dda6ccef82"
+      "sha256": "be009211ad4aeea63852b5879482783f54fe46d7448a346304ef8b991297d749"
     },
     {
       "path": "/lib/adafruit_bus_device/i2c_device.py",
@@ -154,12 +154,12 @@
     {
       "path": "/enviro/version.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/version.py",
-      "sha256": "f6979a5ce6abdaa7b338f244286e9c0ff03469a5ebcdd54df21fafe9f0680449"
+      "sha256": "e3bc4484e75547963cfa9647f1a54fe99d9486163c8c659343eac91ede5f21e5"
     },
     {
       "path": "/enviro/__init__.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/__init__.py",
-      "sha256": "6fbaa1e723c4be7628ce2c49835409c086ac9dbf4badc902020929abbbfff6ab"
+      "sha256": "66045f86a405eef0cf7c8ff9d3d5cdb1c4cd3ca2a99938ccd3dffcf50001ab9b"
     },
     {
       "path": "/enviro/boards/grow.py",
@@ -219,7 +219,7 @@
     {
       "path": "/lib/ota_light.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/lib/ota_light.py",
-      "sha256": "df90da91d15a7b81e102b71548fe103425e611ea3f0236e8716306dda6ccef82"
+      "sha256": "be009211ad4aeea63852b5879482783f54fe46d7448a346304ef8b991297d749"
     },
     {
       "path": "/lib/adafruit_bus_device/i2c_device.py",

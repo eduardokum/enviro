@@ -30,11 +30,11 @@ sleep(0.5)
 # import enviro firmware, this will trigger provisioning if needed
 import enviro
 from lib import ota_light
-from machine import WDT
 from enviro.version import __version__
+from machine import WDT
 import os
 
-wdt = WDT(timeout=8000)
+wdt = WDT(timeout=8000)  # máximo permitido pelo RP2040 (~8 s)
 
 try:
   # initialise enviro
@@ -75,7 +75,9 @@ try:
       try:
         ota_light.check_and_update(current_version=__version__)
       except Exception as e:
-        enviro.logging.error("Falha OTA:", e)
+        enviro.logging.error("[OTA] Failed during update check: %s", e)
+    else:
+        enviro.logging.warning("[OTA] Wi-Fi connection failed — skipping OTA.")
   else:
     enviro.logging.error("OTA ignorado — última verificação recente.")
     
@@ -97,13 +99,13 @@ try:
     reading["battery_percent"] = enviro.helpers.get_battery_percent(reading["battery_voltage"])
     enviro.logging.debug(f"> battery voltage: {reading['battery_voltage']}, percent: {reading['battery_percent']}")
 
-  wdt.feed()
   # here you can customise the sensor readings by adding extra information
   # or removing readings that you don't want, for example:
   # 
   #   del readings["temperature"]        # remove the temperature reading
   #
   #   readings["custom"] = my_reading()  # add my custom reading value
+  wdt.feed()
 
   # is an upload destination set?
   if enviro.config.destination:
@@ -122,8 +124,8 @@ try:
     # otherwise save reading to local csv file (look in "/readings")
     enviro.logging.debug(f"> saving reading locally")
     enviro.save_reading(reading)
-    
   wdt.feed()
+
   # go to sleep until our next scheduled reading
   enviro.sleep()
 
