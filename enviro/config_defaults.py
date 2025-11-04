@@ -88,5 +88,12 @@ def add_missing_config_settings():
     warn_missing_config_setting("voltage_calibration_factor")
     config.voltage_calibration_factor = 1.000
 
+  try:
+    config.hass_discovery
+  except AttributeError:
+    warn_missing_config_setting("hass_discovery")
+    config.hass_discovery = False
+    config.hass_discovery_triggered = False
+
 def warn_missing_config_setting(setting):
     logging.warn(f"> config setting '{setting}' missing, please add it to config.py")

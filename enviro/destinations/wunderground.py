@@ -21,41 +21,68 @@ def get_wunderground_timestamp(enviro_timestamp):
 def upload_reading(reading):
   timestamp = get_wunderground_timestamp(reading["timestamp"])
   
-  url = "https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=" + config.wunderground_id + "&PASSWORD=" + config.wunderground_key + "&dateutc=" + timestamp + "&softwaretype=EnviroWeather&action=updateraw"
+  url = (
+    "https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?"
+    f"ID={config.wunderground_id}&PASSWORD={config.wunderground_key}"
+    f"&dateutc={timestamp}&softwaretype=EnviroWeather&action=updateraw"
+  )
+  readings = reading["readings"]
 
-  # convert and append applicable readings to URL
-  for key, value in reading["readings"].items():
-    if key == "temperature":
-      url += "&tempf=" + str(celcius_to_fahrenheit(value))
+   # Temperature (°C → °F)
+  if "temperature" in readings:
+    url += "&tempf=" + str(celcius_to_fahrenheit(readings["temperature"]))
+  
+   # Temperature Max / Min / Avg (°C → °F)
+  if "temperature_max" in readings:
+    url += "&tempfmax=" + str(celcius_to_fahrenheit(readings["temperature_max"]))
+  if "temperature_min" in readings:
+    url += "&tempfmin=" + str(celcius_to_fahrenheit(readings["temperature_min"]))
+  if "temperature_avg" in readings:
+    url += "&tempavgf=" + str(celcius_to_fahrenheit(readings["temperature_avg"]))
+  
+  # Humidity (%)
+  if "humidity" in readings:
+    humidity = min(readings["humidity"], 100)
+    url += "&humidity=" + str(humidity)
 
-    if key == "humidity":
-      # Humidity can exceed 100% but API states 0-100 accepted values
-      if value > 100:
-        value = 100
-      url += "&humidity=" + str(value)
-    
-    if key == "sea_level_pressure":
-      url += "&baromin=" + str(hpa_to_inches(value))
-    
-    if key == "wind_speed":
-      url += "&windspeedmph=" + str(metres_per_second_to_miles_per_hour(value))
+  # Dew point (°C → °F)
+  if "dewpoint" in readings:
+    url += "&dewptf=" + str(celcius_to_fahrenheit(readings["dewpoint"]))
 
-    if key == "wind_direction":
-      url += "&winddir=" + str(value)
-    
-    if key == "rain_per_hour":
-      url += "&rainin=" + str(mm_to_inches(value))
-    
-    if key == "rain_today":
-      url += "&dailyrainin=" + str(mm_to_inches(value))
+  # Pressure (hPa → inHg)
+  if "sea_level_pressure" in readings:
+    url += "&baromin=" + str(hpa_to_inches(readings["sea_level_pressure"]))
+  elif "pressure" in readings:
+    url += "&baromin=" + str(hpa_to_inches(readings["pressure"]))
+  
+   # Wind speed (m/s → mph)
+  if "wind_speed" in readings:
+    url += "&windspeedmph=" + str(metres_per_second_to_miles_per_hour(readings["wind_speed"]))
 
-    if key == "dewpoint":
-      url += "&dewptf=" + str(celcius_to_fahrenheit(value))
+  # Wind gust (m/s → mph)
+  if "wind_gust" in readings:
+    url += "&windgustmph=" + str(metres_per_second_to_miles_per_hour(readings["wind_gust"]))
 
-    if key == "pressure":
-      url += "&baromin=" + str(hpa_to_inches(value))
+  # Wind direction (°)
+  if "wind_direction" in readings:
+    url += "&winddir=" + str(readings["wind_direction"])
+  
+  # Rain last hour (mm → inches)
+  if "rain_per_hour" in readings:
+    url += "&rainin=" + str(mm_to_inches(readings["rain_per_hour"]))
 
-  logging.info(f"> upload url: {url}")
+  # Rain today (mm → inches)
+  if "rain_today" in readings:
+    url += "&dailyrainin=" + str(mm_to_inches(readings["rain_today"]))
+
+  # Solar radiation (lux → W/m² approximation)
+  if "luminance" in readings:
+    solarrad = round(readings["luminance"] / 120.0, 2)
+    url += "&solarradiation=" + str(solarrad)
+
+  # UV index (if LTR390 present)
+  if "uv_index" in readings:
+    url += "&UV=" + str(readings["uv_index"])
 
   try:
     # send (GET) reading data to http endpoint

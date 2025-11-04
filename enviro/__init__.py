@@ -9,6 +9,7 @@ hold_vsys_en_pin = Pin(HOLD_VSYS_EN_PIN, Pin.OUT, value=True)
 from pimoroni_i2c import PimoroniI2C
 i2c = PimoroniI2C(I2C_SDA_PIN, I2C_SCL_PIN, 100000)
 i2c_devices = i2c.scan()
+
 model = None
 if 56 in i2c_devices: # 56 = colour / light sensor and only present on Indoor
   model = "indoor"
@@ -33,9 +34,20 @@ def get_board():
 
 def get_qwst_modules():
   modules = []
-  if 53 in i2c_devices: # LTR390
-    import enviro.qwst_modules.ltr390 as ltr390
-    modules.append({"name": "LTR390", "include": ltr390, "address": 53})
+  if I2C_ADDR_LTR390 in i2c_devices: # LTR390
+    try:
+      import enviro.qwst_modules.ltr390 as ltr390
+      modules.append({"name": "LTR390", "include": ltr390, "address": I2C_ADDR_LTR390})
+    except RuntimeError:
+      pass
+
+  if I2C_ADDR_SCD41 in i2c_devices: # SCD41
+    try:
+      import enviro.qwst_modules.scd41 as scd41
+      modules.append({"name": "SCD41", "include": scd41, "address": I2C_ADDR_SCD41})
+    except RuntimeError:
+      pass
+
   return modules
   
 # set up the activity led
@@ -251,7 +263,13 @@ def reconnect_wifi(ssid, password, country, hostname=None):
   return elapsed_ms
 
 def connect_to_wifi():
+  import network
   try:
+    wlan = network.WLAN(network.STA_IF)
+    
+    if wlan.active() and wlan.isconnected():
+      return True
+
     logging.info(f"> connecting to wifi network '{config.wifi_ssid}'")
     elapsed_ms = reconnect_wifi(config.wifi_ssid, config.wifi_password, config.wifi_country)
     # a slow connection time will drain the battery faster and may
@@ -430,7 +448,7 @@ def get_qwst_modules_readings():
   module_readings = {}
   modules = get_qwst_modules()
   for module in modules:
-    logging.info(f"  - getting readings from module: {module['name']}")
+    logging.info(f"> getting readings from module: {module['name']}")
     module_readings = module_readings | module["include"].get_readings(i2c, module["address"])
   return module_readings
 
@@ -454,12 +472,24 @@ def save_reading(readings):
 
 # save the provided readings into a cache file for future uploading
 def cache_upload(readings):
+  import network
+
+  # Get Wi-Fi signal strength (RSSI)
+  wlan = network.WLAN(network.STA_IF)
+  wifi_strength = None
+  if wlan.isconnected():
+    try:
+      wifi_strength = wlan.status('rssi')
+    except Exception as e:
+      wifi_strength = None
+
   payload = {
     "nickname": config.nickname,
     "timestamp": helpers.datetime_string(),
     "readings": readings,
     "model": model,
-    "uid": helpers.uid()
+    "uid": helpers.uid(),
+    "wifi": wifi_strength
   }
 
   uploads_filename = f"uploads/{helpers.datetime_file_string()}.json"
@@ -495,7 +525,6 @@ def upload_readings():
     if secondary_destination in valid_secondary_destinations and secondary_destination != destination:
       exec(f"import enviro.destinations.{secondary_destination}")
       secondary_destination_module = sys.modules[f"enviro.destinations.{secondary_destination}"]
-
 
     for cache_file in os.ilistdir("uploads"):
       try:
@@ -571,7 +600,7 @@ def upload_readings():
 # HASS Discovery
 def hass_discovery():
   if not connect_to_wifi():
-    logging.error(f"  - cannot upload readings, wifi connection failed")
+    logging.error(f"! wifi connection failed")
     return False
 
   destination = config.destination
@@ -583,8 +612,8 @@ def hass_discovery():
   except ImportError:
     logging.error(f"! cannot find destination {destination}")
     return False
-  except:
-      logging.error(f"Unknown error in setting HASS Discovery")
+  except Exception as e:
+    llogging.error("! unknown error in setting HASS Discovery: {}".format(e))
 
 def startup():
   import sys
@@ -673,7 +702,7 @@ def sleep(time_override=None):
   rtc.enable_alarm_interrupt(True)
 
   # disable the vsys hold, causing us to turn off
-  logging.info("  - shutting down at " + str(time.localtime()))
+  logging.info("  - shutting down at " + helpers.datetime_string())
   hold_vsys_en_pin.init(Pin.IN)
 
   # if we're still awake it means power is coming from the USB port in which

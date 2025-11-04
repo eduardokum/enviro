@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import os, json, hashlib, re
-
-# pastas a incluir no manifest
-INCLUDE_DIRS = [".", "enviro", "lib"]
+import os, json, hashlib, re
 
 # filtros de exclusão
 EXCLUDE_DIRS = {
@@ -10,7 +8,8 @@ EXCLUDE_DIRS = {
 }
 EXCLUDE_FILES = {
     "manifest.json", "config.py", "install-on-device-fs",
-    "install-on-device-fs.ps1", "LICENSE", "README.md", "uf2-manifest.txt"
+    "install-on-device-fs.ps1", "LICENSE", "README.md", "uf2-manifest.txt",
+    "sync_time.txt", "last_time.txt", "daily_stats.json"
 }
 EXCLUDE_EXTENSIONS = {".pyc", ".zip", ".DS_Store"}
 
@@ -56,7 +55,7 @@ def main():
     write_new_version(new_version)
 
     files = []
-    for d in INCLUDE_DIRS:
+    for d in ".":
         for root, dirs, names in os.walk(d):
             # ignora diretórios ocultos e listados
             dirs[:] = [

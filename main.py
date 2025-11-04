@@ -29,17 +29,13 @@ sleep(0.5)
 
 # import enviro firmware, this will trigger provisioning if needed
 import enviro
-from lib import ota_light
 from enviro.version import __version__
-from machine import WDT
+import lib.ota_light as ota
 import os
-
-wdt = WDT(timeout=8000)  # máximo permitido pelo RP2040 (~8 s)
 
 try:
   # initialise enviro
   enviro.startup()
-  wdt.feed()
 
   # if the clock isn't set...
   if not enviro.is_clock_set():
@@ -70,33 +66,30 @@ try:
   filesystem_stats = os.statvfs(".")
   enviro.logging.debug(f"> {filesystem_stats[3]} blocks free out of {filesystem_stats[2]}")
 
-  if ota_light.should_check_ota():
-    if enviro.connect_to_wifi():
-      try:
-        ota_light.check_and_update(current_version=__version__)
-      except Exception as e:
-        enviro.logging.error("[OTA] Failed during update check: %s", e)
-    else:
-        enviro.logging.warning("[OTA] Wi-Fi connection failed — skipping OTA.")
-  else:
-    enviro.logging.error("OTA ignorado — última verificação recente.")
-    
+  ota.check_and_update(current_version=__version__)
+
   # Add HASS Discovery command before taking new readings
-  if enviro.config.destination == "mqtt":
-      if enviro.config.hass_discovery:
-        enviro.hass_discovery()
-        enviro.logging.debug(f"> hass dicovery package sent")
-      else:
-        enviro.logging.debug(f"> hass dicovery disabled")
+  if (
+      not enviro.config.hass_discovery_triggered
+      and enviro.config.destination == "mqtt"
+      and enviro.config.hass_discovery
+  ):
+      enviro.hass_discovery()
+  else:
+      enviro.logging.debug("> HASS discovery disabled or not applicable")
 
   # TODO should the board auto take a reading when the timer has been set, or wait for the time?
   # take a reading from the onboard sensors
   enviro.logging.debug(f"> taking new reading")
   reading = enviro.get_sensor_readings()
-  if enviro.config.enable_battery_voltage:
+  if enviro.config.enable_battery_voltage and not enviro.vbus_present:
     enviro.logging.debug(f"> geting battery voltage")
-    reading["battery_voltage"] = enviro.helpers.get_battery_voltage()
-    reading["battery_percent"] = enviro.helpers.get_battery_percent(reading["battery_voltage"])
+    vbat_filtered = 0
+    while vbat_filtered < 3.0 or vbat_filtered > 4.3:
+      vbat_filtered = enviro.helpers.get_battery_voltage()
+      sleep(0.5)
+    reading["battery_voltage"] = vbat_filtered
+    reading["battery_percent"] = enviro.helpers.get_battery_percent(vbat_filtered)
     enviro.logging.debug(f"> battery voltage: {reading['battery_voltage']}, percent: {reading['battery_percent']}")
 
   # here you can customise the sensor readings by adding extra information
@@ -105,7 +98,6 @@ try:
   #   del readings["temperature"]        # remove the temperature reading
   #
   #   readings["custom"] = my_reading()  # add my custom reading value
-  wdt.feed()
 
   # is an upload destination set?
   if enviro.config.destination:
@@ -124,7 +116,6 @@ try:
     # otherwise save reading to local csv file (look in "/readings")
     enviro.logging.debug(f"> saving reading locally")
     enviro.save_reading(reading)
-  wdt.feed()
 
   # go to sleep until our next scheduled reading
   enviro.sleep()

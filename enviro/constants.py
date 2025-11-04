@@ -18,6 +18,8 @@ ACTIVITY_LED_PIN              = 6
 BUTTON_PIN                    = 7
 RTC_ALARM_PIN                 = 8
 RAIN_PIN                      = 10
+WIND_DIRECTION_PIN            = 26
+WIND_SPEED_PIN                = 9
 
 # system pins
 WIFI_CS_PIN                   = 25
@@ -47,3 +49,8 @@ UPLOAD_SKIP_FILE = 4
 WATER_VAPOR_SPECIFIC_GAS_CONSTANT = 461.5
 CRITICAL_WATER_TEMPERATURE = 647.096
 CRITICAL_WATER_PRESSURE = 22064000
+
+# I2C addresses
+I2C_ADDR_LTR390   = 0x53
+I2C_ADDR_SCD41    = 0x62
+I2C_ADDR_BME280   = 0x77
