@@ -4,16 +4,20 @@ from phew import logging
 import enviro
 import urequests
 
-MANIFEST_URL = "https://raw.githubusercontent.com/eduardokum/enviro/main/releases/manifest.json"
+MANIFEST_URL = (
+    "https://raw.githubusercontent.com/eduardokum/enviro/main/releases/manifest.json"
+)
 WORK_DIR = "/ota"
 BUFFER_SIZE = 1024
 LAST_CHECK_FILE = "/ota/last_check.txt"
 CHECK_INTERVAL_HOURS = 24  # check for OTA updates every 24 hours
 
+
 def _wifi_connected():
     if not enviro.connect_to_wifi():
         return False
     return True
+
 
 def _https_get(url):
     """Perform an HTTPS GET using urequests (built-in SSL)."""
@@ -59,6 +63,7 @@ def _safe_write(path, data):
         pass
     os.rename(tmp, path)
 
+
 def _read_file(path):
     """Read file contents, returning None if not found."""
     try:
@@ -67,8 +72,9 @@ def _read_file(path):
     except:
         return None
 
+
 def check_and_update(current_version="0.0.0"):
-    try:    
+    try:
         """Check if should try the OTA"""
         last_ts = _read_last_check()
         now = _rtc_timestamp()
@@ -120,16 +126,18 @@ def check_and_update(current_version="0.0.0"):
 
             checksum = _sha256(data)
             if checksum != expected:
-                logging.warn("  - OTA Invalid hash for file: {}, skipping.".format(path))
+                logging.warn(
+                    "  - OTA Invalid hash for file: {}, skipping.".format(path)
+                )
                 continue
 
             _safe_write(path, data)
             logging.info("  - OTA File updated successfully: {}".format(path))
 
         logging.info("  - OTA Firmware update applied successfully — rebooting...")
-        
+
         _safe_write("enviro/version.py", f'__version__ = "{new_version}"\n')
-        
+
         _write_last_check(now)
         time.sleep(2)
         machine.reset()
@@ -167,11 +175,13 @@ def _write_last_check(ts):
     with open(LAST_CHECK_FILE, "w") as f:
         f.write(str(ts))
 
+
 def _rtc_timestamp():
     """Return timestamp from RTC (seconds since epoch)."""
     try:
         y, m, d, wd, hh, mm, ss, _ = machine.RTC().datetime()
         import utime
+
         return utime.mktime((y, m, d, hh, mm, ss, 0, 0))
     except:
         return time.time()

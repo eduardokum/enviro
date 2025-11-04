@@ -16,6 +16,7 @@ REG_ALS_DATA = 0x0D
 REG_UVS_DATA = 0x10
 REG_STATUS = 0x07
 
+
 class LTR390:
     def __init__(self, i2c, address=LTR390_I2CADDR_DEFAULT):
         self.i2c = i2c

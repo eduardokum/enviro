@@ -24,7 +24,7 @@
     {
       "path": "/enviro/helpers.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/helpers.py",
-      "sha256": "2ab92015058effbc61436a20795d3d5bbe3383c8b77d53442c7587b0fdd83b2b"
+      "sha256": "8d71ef7a5e56683de03eb294dd7eb9785d49928ae54995e53252b9bdbcdf8150"
     },
     {
       "path": "/enviro/mqttsimple.py",
@@ -39,7 +39,7 @@
     {
       "path": "/enviro/__init__.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/__init__.py",
-      "sha256": "4263a302488e6a9898a7b50c30fde6d0f8b243b65208472ed1dcbe5a6fba9945"
+      "sha256": "7ce0b1ef9481295f3e085a73832a91387d1e60dd8286cc3c3c238ffde89ab102"
     },
     {
       "path": "/enviro/boards/grow.py",
@@ -109,7 +109,7 @@
     {
       "path": "/lib/ota_light.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/lib/ota_light.py",
-      "sha256": "166da7f82a2fcd7ed233a3dc0c4e96c4c0807d043a83440acdfc78f654b73512"
+      "sha256": "8d0efdba51ce789520803a668f1535f181fe66bb06b714d45a255c7e3bde7953"
     }
   ]
 }

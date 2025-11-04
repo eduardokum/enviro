@@ -26,7 +26,7 @@ reading_frequency = 15
 # how often to trigger a resync of the onboard RTC (in hours)
 resync_frequency = 168
 
-# Watchdog timer in whole minutes (integer), 0 is not active 
+# Watchdog timer in whole minutes (integer), 0 is not active
 pio_watchdog_time = 10
 
 # where to upload to ("http", "mqtt", "adafruit_io", "influxdb", "wunderground")
@@ -55,7 +55,9 @@ mqtt_broker_password = None
 mqtt_broker_ca_file = None
 
 # Home Assistant Discovery setting
-hass_discovery = False # This could arguably be set to a text field for better customisability 
+hass_discovery = (
+    False  # This could arguably be set to a text field for better customisability
+)
 hass_discovery_triggered = False
 
 # adafruit ui settings
