@@ -54,8 +54,6 @@ def check_trigger():
     global last_rain_trigger
     rain_sensor_trigger = rain_pin.value()
 
-    logging.info(f"> checking trigger ")
-
     if rain_sensor_trigger and not last_rain_trigger:
         activity_led(100)
         time.sleep(0.05)
