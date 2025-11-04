@@ -1,5 +1,5 @@
 {
-  "version": "1.3.9",
+  "version": "1.3.10",
   "files": [
     {
       "path": "/main.py",
@@ -35,11 +35,6 @@
       "path": "/enviro/provisioning.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/provisioning.py",
       "sha256": "479007df4709c846f4929da45d587728787b92b627cf741f6d515958efa06686"
-    },
-    {
-      "path": "/enviro/version.py",
-      "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/version.py",
-      "sha256": "49a5a0508eaff769157c5fd0768c5b7dcdfc6f0037e11b8319999732a6b98377"
     },
     {
       "path": "/enviro/__init__.py",
@@ -114,7 +109,7 @@
     {
       "path": "/lib/ota_light.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/lib/ota_light.py",
-      "sha256": "5cb72575833ccb8bedbc8a131670c51bd56c4f13b7e1853c8253c10781adf0fc"
+      "sha256": "166da7f82a2fcd7ed233a3dc0c4e96c4c0807d043a83440acdfc78f654b73512"
     }
   ]
 }

@@ -7,7 +7,7 @@ EXCLUDE_DIRS = {
     "tools", "__pycache__", "enviro/html", "phew", "documentation"
 }
 EXCLUDE_FILES = {
-    "manifest.json", "config.py", "install-on-device-fs",
+    "manifest.json", "config.py", "install-on-device-fs", "enviro/version.py",
     "install-on-device-fs.ps1", "LICENSE", "README.md", "uf2-manifest.txt",
     "sync_time.txt", "last_time.txt", "daily_stats.json"
 }
@@ -66,24 +66,27 @@ def main():
             ]
 
             for name in names:
+                path = os.path.join(root, name)
+                rel = os.path.relpath(path, ".").replace("\\", "/")
+
                 # ignora arquivos ocultos e listados
-                if name.startswith(".") or name in EXCLUDE_FILES:
+                if name.startswith(".") or name in EXCLUDE_FILES or rel in EXCLUDE_FILES:
                     continue
                 ext = os.path.splitext(name)[1]
                 if ext in EXCLUDE_EXTENSIONS:
                     continue
 
-                path = os.path.join(root, name)
                 if not os.path.isfile(path):
                     continue
 
-                rel = os.path.relpath(path, ".").replace("\\", "/")
+                print(f"Adicionando arquivo {rel}")
 
                 url = BASE_URL + rel
                 sha = file_sha256(path)
                 files.append({"path": "/" + rel, "url": url, "sha256": sha})
 
     manifest = {"version": new_version, "files": files}
+
     os.makedirs(os.path.dirname(MANIFEST_PATH), exist_ok=True)
     with open(MANIFEST_PATH, "w") as f:
         json.dump(manifest, f, indent=2)

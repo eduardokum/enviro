@@ -95,12 +95,14 @@ def check_and_update(current_version="0.0.0"):
             logging.error("  - OTA Invalid manifest JSON: {}".format(e))
             return False
 
-        if manifest.get("version") == current_version:
+        new_version = manifest.get("version")
+
+        if new_version == current_version:
             _write_last_check(now)
             logging.info("  - OTA Firmware already up to date.")
             return False
 
-        logging.info("  - OTA New firmware version available: {}".format(manifest["version"]))
+        logging.info("  - OTA New firmware version available: {}".format(new_version))
         for f in manifest["files"]:
             path = f["path"]
             url = f["url"]
@@ -118,13 +120,15 @@ def check_and_update(current_version="0.0.0"):
 
             checksum = _sha256(data)
             if checksum != expected:
-                logging.warning("  - OTA Invalid hash for file: {}, skipping.".format(path))
+                logging.warn("  - OTA Invalid hash for file: {}, skipping.".format(path))
                 continue
 
             _safe_write(path, data)
             logging.info("  - OTA File updated successfully: {}".format(path))
 
         logging.info("  - OTA Firmware update applied successfully — rebooting...")
+        
+        _safe_write("enviro/version.py", f'__version__ = "{new_version}"\n')
         
         _write_last_check(now)
         time.sleep(2)
