@@ -152,8 +152,6 @@ def check_and_update(current_version="0.0.0"):
                 else:
                     new_lines.append(line)
 
-            new_lines.append(f"\n{var_name} = {new_value_str}\n")
-
             # Write lines back to file (MicroPython-safe)
             with open("config.py", "w") as f:
                 for line in new_lines:

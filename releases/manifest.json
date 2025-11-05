@@ -1,5 +1,5 @@
 {
-  "version": "1.3.11",
+  "version": "1.3.12",
   "files": [
     {
       "path": "/main.py",
@@ -59,7 +59,7 @@
     {
       "path": "/enviro/boards/weather.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/boards/weather.py",
-      "sha256": "bd63c821ff0ebff04f0eaab92ca89f5085fbef7d49afeec2c0c0f1136ca2f59b"
+      "sha256": "488bd41e7f78f62ed5c57ed02740babab55c43b0d03d89a8128ca5c55e8b888e"
     },
     {
       "path": "/enviro/destinations/adafruit_io.py",
