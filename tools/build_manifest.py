@@ -9,6 +9,7 @@ EXCLUDE_FILES = {
     "config.py",
     "install-on-device-fs",
     "enviro/version.py",
+    "lib/ota_light.py",
     "install-on-device-fs.ps1",
     "LICENSE",
     "README.md",

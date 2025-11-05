@@ -1,115 +1,110 @@
 {
-  "version": "1.3.10",
+  "version": "1.3.11",
   "files": [
     {
       "path": "/main.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/main.py",
-      "sha256": "12d4afd15f495f80ed7821cf7f65ec14667baf7616345aef8c3f0be092cc575c"
+      "sha256": "0ac10be2b232529ffb6ede4afc8f4cfed64422d1065c25c86f5d8c4574050e51"
     },
     {
       "path": "/enviro/config_defaults.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/config_defaults.py",
-      "sha256": "c57475a0b5a307a287be48095189d1804115a363dbcb4d4a75309758f1b80da6"
+      "sha256": "ac6356238078dd2957ac597e8dae82cae0401b9959fcd7344eb1935392aa03fd"
     },
     {
       "path": "/enviro/config_template.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/config_template.py",
-      "sha256": "cecc524d5da438f4c309f5af01221f5b4179051e621af927561d7d8870f9f221"
+      "sha256": "91b8ad3c946ac8a052e6aa3a05a7f1141220412bfea60f490eaf6cf9e4ac0a16"
     },
     {
       "path": "/enviro/constants.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/constants.py",
-      "sha256": "496b42b534c053c8a0ec0a7b55f1584c8b2bca1d583c58bfc664583a92f28574"
+      "sha256": "c17bf9eafbd2a16a2b0fb0c5a746003fc669e940c094026c8b4fce8e9745d165"
     },
     {
       "path": "/enviro/helpers.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/helpers.py",
-      "sha256": "8d71ef7a5e56683de03eb294dd7eb9785d49928ae54995e53252b9bdbcdf8150"
+      "sha256": "36ad45ca2ec41ce9bf53d1b20de055e4972309e1c8f4b9fac4a605caabeeea83"
     },
     {
       "path": "/enviro/mqttsimple.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/mqttsimple.py",
-      "sha256": "00ad1ab0a28b350f5a4c1b9fac5f77d849232098d05f58be598e04a62ac7c83a"
+      "sha256": "ea68efba0c81f94fc015c3598dd6bd29879721b015e582bbba4245f13e564771"
     },
     {
       "path": "/enviro/provisioning.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/provisioning.py",
-      "sha256": "479007df4709c846f4929da45d587728787b92b627cf741f6d515958efa06686"
+      "sha256": "8c07ea80edd3c2d8397ddc08d34512c7732daa75e0bf7d5bb7a7bd2619e34a4e"
     },
     {
       "path": "/enviro/__init__.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/__init__.py",
-      "sha256": "7ce0b1ef9481295f3e085a73832a91387d1e60dd8286cc3c3c238ffde89ab102"
+      "sha256": "eb1e7a8613cbc59befcb2d70facf8f190300949f16742ca341acfa4d7e3f2eb4"
     },
     {
       "path": "/enviro/boards/grow.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/boards/grow.py",
-      "sha256": "79b1fc032166beb7a730d05216379da903b96dff840a2e9f442665479e22d6b0"
+      "sha256": "8748fdd2d314b5de4ac6b73293cd5197d2faff484909cf899c2806f3b834b6b5"
     },
     {
       "path": "/enviro/boards/indoor.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/boards/indoor.py",
-      "sha256": "c0d3d54670fd1d53d18b8e83773452e781a7a6f3da9a4ca2b9091724feda3e28"
+      "sha256": "57241630c05929e62ffbea7796912644c0cdf99dc0a517466ef701d0af6401d6"
     },
     {
       "path": "/enviro/boards/urban.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/boards/urban.py",
-      "sha256": "3a4368cd9f78e0ec5d40e0a1fc184bbd73a90356cd11df8efc73f767618d9492"
+      "sha256": "ac4925cf033ae0cca3b218cef11e17319649a433c0ebaa4f7c14b026f0952e77"
     },
     {
       "path": "/enviro/boards/weather.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/boards/weather.py",
-      "sha256": "c9b6e8e83a3a13e6e5898ad594201c87cb12954bb62d8cbdef3d004fc6753b9a"
+      "sha256": "bd63c821ff0ebff04f0eaab92ca89f5085fbef7d49afeec2c0c0f1136ca2f59b"
     },
     {
       "path": "/enviro/destinations/adafruit_io.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/destinations/adafruit_io.py",
-      "sha256": "45e9828907d8780b11b840953b8951b1d95547a7971f998e2b3ffc56b78d1a7d"
+      "sha256": "18074954334cfa03f984d4aa78a4d315660a3c99614e0de55ee822f17c1b5ace"
     },
     {
       "path": "/enviro/destinations/http.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/destinations/http.py",
-      "sha256": "337534aa78ff7da2c3cd612378050212f91763c38e6763019e81f8809a387c1d"
+      "sha256": "c84f109065ae95c8431237b3159d001af5b8331aeb59cfa65992484752d37ab2"
     },
     {
       "path": "/enviro/destinations/influxdb.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/destinations/influxdb.py",
-      "sha256": "0c3bce7d508acc710ffceee6387b7edcb48b2b742b49e4551ec857a4868476ea"
+      "sha256": "1a77bfd1459ce886bed3eb65caee16767ad7da7a8a0f699bf8c98fd75989de11"
     },
     {
       "path": "/enviro/destinations/mqtt.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/destinations/mqtt.py",
-      "sha256": "0267875d3c0ee7ad3c0e7948f74b69a6487980e724512764c68b7550e5c672e1"
+      "sha256": "66fd0ffd79c102a8d4049e29e02428fe1ee2b5204ae529c4811b2c21a9cb4c22"
     },
     {
       "path": "/enviro/destinations/wunderground.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/destinations/wunderground.py",
-      "sha256": "597a093dd6a2f4a4954b9a80c18553784a112f8d473702287d30b3fd2e1c9578"
+      "sha256": "2d0fd64404d60e69d0f976e66d7632626a9b491737a99b78b1fc5b91ccfbccd1"
     },
     {
       "path": "/enviro/qwst_modules/bme688.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/qwst_modules/bme688.py",
-      "sha256": "dd6a541c77cbeb83c8c44238ee532aba70017fa32919af8a734ea2e50a64971b"
+      "sha256": "efbbac2a777ab062745ab66b5561073a4df9651f555251a5b85af5e0fd550609"
     },
     {
       "path": "/enviro/qwst_modules/ltr390.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/qwst_modules/ltr390.py",
-      "sha256": "73763693bdd128140a4fd168083cedfd9025206ae548d6028fcd37bb2edd88ed"
+      "sha256": "d377c2ff5f6aa9dfecef46ca87efa22721a5efdad4486c3a177f3fd311bebf80"
     },
     {
       "path": "/enviro/qwst_modules/scd41.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/enviro/qwst_modules/scd41.py",
-      "sha256": "1673b0e6065d9bcd71d596f42e3b5d15fcf18fe53dec4ce5e390ce0f2fa0e384"
+      "sha256": "dcaf7d888a08f83abab62fea2ce23338e18833880ac7720181b512da7687e05b"
     },
     {
       "path": "/lib/adafruit_ltr390.py",
       "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/lib/adafruit_ltr390.py",
-      "sha256": "d965a8d868228af9b2cb1c97d892a12c4f2e995a4ccf1e8f43b0180f4f18c4aa"
-    },
-    {
-      "path": "/lib/ota_light.py",
-      "url": "https://raw.githubusercontent.com/eduardokum/enviro/main/lib/ota_light.py",
-      "sha256": "8d0efdba51ce789520803a668f1535f181fe66bb06b714d45a255c7e3bde7953"
+      "sha256": "a2cc80e50e3db7b0c7d007e3d0d5f2bbf24e4fea7568551e1e699f3e847bcaa6"
     }
   ]
 }

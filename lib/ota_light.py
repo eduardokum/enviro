@@ -134,11 +134,37 @@ def check_and_update(current_version="0.0.0"):
             _safe_write(path, data)
             logging.info("  - OTA File updated successfully: {}".format(path))
 
-        logging.info("  - OTA Firmware update applied successfully — rebooting...")
-
+        logging.info("  - OTA Firmware update applied successfully")
         _safe_write("enviro/version.py", f'__version__ = "{new_version}"\n')
-
         _write_last_check(now)
+
+        try:
+            with open("config.py", "r") as f:
+                lines = f.readlines()
+
+            new_lines = []
+            for line in lines:
+                stripped = line.lstrip()
+                if stripped.startswith("hass_discovery_triggered ="):
+                    # Build updated line preserving comment
+                    new_line = f"hass_discovery_triggered = False\n"
+                    new_lines.append(new_line)
+                else:
+                    new_lines.append(line)
+
+            new_lines.append(f"\n{var_name} = {new_value_str}\n")
+
+            # Write lines back to file (MicroPython-safe)
+            with open("config.py", "w") as f:
+                for line in new_lines:
+                    f.write(line)
+
+            logging.info("  - OTA hass_discovery_triggered updated to False")
+        except:
+            pass
+
+        logging.info("  - OTA rebooting...")
+
         time.sleep(2)
         machine.reset()
         return True

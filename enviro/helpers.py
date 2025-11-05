@@ -269,6 +269,24 @@ def mm_to_inches(distance_in_mm):
     return distance_in_mm * 0.0393700787
 
 
+def deg_to_vec(deg):
+    rad = math.radians(deg % 360.0)
+    return math.cos(rad), math.sin(rad)
+
+
+def angular_diff(a, b):
+    """Smallest signed diff a-b in degrees (-180..180)."""
+    d = (a - b + 180.0) % 360.0 - 180.0
+    return d
+
+
+def vec_to_deg(x, y):
+    if x == 0 and y == 0:
+        return 0.0
+    ang = math.degrees(math.atan2(y, x))
+    return (ang + 360.0) % 360.0
+
+
 # https://www.calctool.org/atmospheric-thermodynamics/absolute-humidity#actual-vapor-pressure
 # http://cires1.colorado.edu/~voemel/vp.html
 def get_actual_vapor_pressure(relative_humidity, temperature_in_k):

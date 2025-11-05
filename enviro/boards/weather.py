@@ -65,6 +65,11 @@ def check_trigger():
 
 
 # ================================================================
+# 🧠 Cached Daily Stats Handling
+# ================================================================
+_daily_stats_cache = None
+
+# ================================================================
 # ☔ Rain Handling
 # ================================================================
 
@@ -134,6 +139,54 @@ def update_wind_stats(current_speed):
 # ================================================================
 # 🌬️ Wind Direction
 # ================================================================
+
+
+def smooth_direction(
+    dir_deg, speed_mps, alpha_base=0.25, min_speed=0.8, hysteresis_deg=8.0
+):
+    """
+    Speed-weighted exponential moving average for wind direction.
+    - Ignores updates when speed is below min_speed (too turbulent).
+    - Applies hysteresis: if change is small and speed is low, skip.
+    - Persists EMA state in daily_stats.json.
+    Returns (smoothed_dir_deg, confidence_0_1).
+    """
+    state = load_dir_state()
+    ema_x = state.get("ema_x", 0.0)
+    ema_y = state.get("ema_y", 0.0)
+
+    # If too calm, do not update; just return current estimate
+    if speed_mps < min_speed and (ema_x != 0.0 or ema_y != 0.0):
+        R = math.sqrt(ema_x * ema_x + ema_y * ema_y)
+        return helpers.vec_to_deg(ema_x, ema_y), max(0.0, min(1.0, R))
+
+    # Compute current EMA direction for hysteresis decision
+    current_dir = (
+        helpers.vec_to_deg(ema_x, ema_y) if (ema_x != 0.0 or ema_y != 0.0) else dir_deg
+    )
+    if abs(
+        helpers.angular_diff(dir_deg, current_dir)
+    ) < hysteresis_deg and speed_mps < (min_speed * 1.5):
+        # change too small under low speed → skip update
+        R = math.sqrt(ema_x * ema_x + ema_y * ema_y)
+        return current_dir, max(0.0, min(1.0, R))
+
+    # Speed-weight alpha: stronger wind → faster response
+    # Clamp weight between 0.5x..2x the base alpha
+    speed_weight = max(0.5, min(2.0, speed_mps / 3.0))
+    alpha = max(0.05, min(0.8, alpha_base * speed_weight))
+
+    vx, vy = helpers.deg_to_vec(dir_deg)
+    ema_x = (1.0 - alpha) * ema_x + alpha * vx
+    ema_y = (1.0 - alpha) * ema_y + alpha * vy
+
+    # Persist
+    save_dir_state(ema_x, ema_y)
+
+    # Output
+    R = math.sqrt(ema_x * ema_x + ema_y * ema_y)  # confidence proxy
+    smoothed = helpers.vec_to_deg(ema_x, ema_y)
+    return smoothed, max(0.0, min(1.0, R))
 
 
 def wind_direction():
@@ -261,6 +314,13 @@ def estimate_pollen_index(temperature, humidity, wind_speed, rain_today, luminan
 
 
 def load_daily_stats():
+    global _daily_stats_cache
+    if (
+        _daily_stats_cache is not None
+        and _daily_stats_cache.get("date") == helpers.date_string()
+    ):
+        return _daily_stats_cache
+
     """Load or create daily statistics JSON file."""
     today = helpers.date_string()
     base = {
@@ -289,13 +349,33 @@ def load_daily_stats():
             save_daily_stats(base)
     else:
         save_daily_stats(base)
+
+    _daily_stats_cache = base
     return base
 
 
 def save_daily_stats(data):
+    global _daily_stats_cache
     """Save stats to JSON file."""
+    _daily_stats_cache = data
     with open(DAILY_STATS_FILE, "w") as f:
         ujson.dump(data, f)
+
+
+def load_dir_state():
+    data = load_daily_stats()
+    s = data.get("wind_dir_state", None)
+    if not s:
+        s = {"ema_x": 0.0, "ema_y": 0.0}
+        data["wind_dir_state"] = s
+        save_daily_stats(data)
+    return s
+
+
+def save_dir_state(ema_x, ema_y):
+    data = load_daily_stats()
+    data["wind_dir_state"] = {"ema_x": ema_x, "ema_y": ema_y}
+    save_daily_stats(data)
 
 
 # ================================================================
@@ -341,7 +421,8 @@ def get_sensor_readings(seconds_since_last, is_usb_power):
 
     current_wind = wind_speed()
     avg_wind, gust_wind = update_wind_stats(current_wind)
-    wind_dir = wind_direction()
+    raw_wind_dir = wind_direction()
+    smoothed_dir, dir_conf = smooth_direction(raw_wind_dir, avg_wind)
     daily_stats = load_daily_stats()
 
     from ucollections import OrderedDict
@@ -354,7 +435,8 @@ def get_sensor_readings(seconds_since_last, is_usb_power):
             "luminance": round(ltr_data[BreakoutLTR559.LUX], 2),
             "wind_speed": avg_wind,
             "wind_gust": gust_wind,
-            "wind_direction": wind_dir,
+            "wind_direction": smoothed_dir,
+            "wind_direction_confidence": round(dir_conf, 3),
             # ✅ Rain metrics restored
             "rain": round(rain, 4),
             "rain_per_second": round(rain_per_second, 6),

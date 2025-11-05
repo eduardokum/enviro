@@ -160,6 +160,15 @@ def hass_discovery(board_type):
             "mdi:compass",
         )  # Wind Direction
         mqtt_discovery(
+            "Wind Direction Confidence",
+            "none",
+            "",
+            "wind_direction_confidence",
+            board_type,
+            mqtt_client,
+            "mdi:target-variant",
+        )  # Wind Direction Confidence
+        mqtt_discovery(
             "Rain",
             "precipitation",
             "mm",
